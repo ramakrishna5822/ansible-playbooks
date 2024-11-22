@@ -1,0 +1,17 @@
+---
+- hosts: 192.168.56.15
+  become: true
+  tasks:
+  - name: Create  User
+    user:
+      name: Harsha
+      create_home: true
+      shell: /bin/bash
+      comment: "Ansible Management Account"
+      expires: -1
+      password: "{{ 'DevOps@2024' | password_hash('sha512','A512') }}"
+  - name: Setup Sudo Access for Devops User
+    copy:
+      dest: /etc/sudoers.d/Harsha
+      content: 'Harsha ALL=(ALL:ALL) NOPASSWD: ALL' 
+      validate: /usr/sbin/visudo -cf %s

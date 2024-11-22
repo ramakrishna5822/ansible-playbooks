@@ -1,0 +1,8 @@
+---
+- hosts: 192.168.56.15
+  become: true
+  tasks:
+   - name: copy files
+     copy:
+       src: /home/ansible/demo.txt
+       dest: /home/bindhu/demo.txt
