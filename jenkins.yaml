@@ -1,0 +1,32 @@
+---
+- hosts: 192.168.56.15
+  become: true
+  tasks:
+   - name: install java
+     apt:
+       name: openjdk-17-jre-headless 
+       state: present
+   - name: add key
+     apt_key:
+       url:  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+   - name: add repository
+     apt_repository:
+       repo: deb https://pkg.jenkins.io/debian binary/
+   - name: update
+     apt:
+       update_cache: yes
+   - name: install jenkins
+     apt: 
+       name: jenkins
+       state: present
+   - name: start jenkins service
+     service:
+       name: jenkins
+       state: started
+   - name: init password jenkins
+     shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+     changed_when: false
+     register: result
+   - name: print init password jenkins
+     debug:
+       var: result.stdout     
